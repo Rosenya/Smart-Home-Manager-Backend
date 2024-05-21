@@ -1,0 +1,315 @@
+##### 1. Serwis Zarządzania Urządzeniami
+
+**Opis**:
+Serwis Zarządzania Urządzeniami odpowiada za zarządzanie wszystkimi urządzeniami inteligentnego domu, takimi jak światła, termostaty, kamery i czujniki. Obsługuje operacje CRUD na urządzeniach i utrzymuje aktualny status każdego urządzenia. Serwis zapewnia również punkty końcowe do aktualizacji statusu urządzeń, umożliwiając interakcję i kontrolę w czasie rzeczywistym.
+
+**Kluczowe Funkcje**:
+- Dodawanie, aktualizacja i usuwanie urządzeń.
+- Pobieranie listy wszystkich urządzeń lub szczegółów konkretnego urządzenia.
+- Aktualizacja statusu urządzeń (np. włącz/wyłącz, ustawienia temperatury).
+- Wykorzystanie wielowątkowości do obsługi równoczesnych interakcji z urządzeniami.
+
+**Punkty Końcowe**:
+- `GET /devices`: Pobierz listę urządzeń.
+- `GET /devices/{id}`: Pobierz szczegóły konkretnego urządzenia.
+- `POST /devices`: Dodaj nowe urządzenie.
+- `PUT /devices/{id}`: Aktualizuj status urządzenia.
+- `DELETE /devices/{id}`: Usuń urządzenie.
+
+##### 2. Serwis Zarządzania Użytkownikami
+
+**Opis**:
+Serwis Zarządzania Użytkownikami zarządza informacjami o użytkownikach, w tym rejestracją, uwierzytelnianiem i zarządzaniem profilami. Zapewnia bezpieczny dostęp do systemu inteligentnego domu, obsługując poświadczenia i uprawnienia użytkowników. Serwis wykorzystuje Spring Security do zapewnienia solidnych mechanizmów uwierzytelniania i autoryzacji.
+
+**Kluczowe Funkcje**:
+- Rejestracja i uwierzytelnianie użytkowników.
+- Pobieranie i aktualizacja profili użytkowników.
+- Zabezpieczanie punktów końcowych za pomocą JWT (JSON Web Tokens).
+- Zarządzanie rolami i uprawnieniami użytkowników.
+
+**Punkty Końcowe**:
+- `POST /users/register`: Rejestracja nowego użytkownika.
+- `POST /users/login`: Uwierzytelnianie użytkownika.
+- `GET /users/{id}`: Pobierz szczegóły użytkownika.
+- `PUT /users/{id}`: Aktualizuj profil użytkownika.
+- `DELETE /users/{id}`: Usuń użytkownika.
+
+##### 3. Serwis Automatyzacji
+
+**Opis**:
+Serwis Automatyzacji obsługuje tworzenie, zarządzanie i wykonywanie reguł automatyzacji oraz harmonogramów dla urządzeń inteligentnego domu. Użytkownicy mogą ustawiać reguły automatyzacji dla urządzeń na podstawie określonych warunków, takich jak harmonogramy czasowe lub wyzwalacze z czujników. Serwis przetwarza te reguły i wykonuje odpowiednie działania.
+
+**Kluczowe Funkcje**:
+- Tworzenie, aktualizacja i usuwanie reguł automatyzacji.
+- Harmonogramowanie działań urządzeń na podstawie warunków (np. godzina dnia, dane z czujników).
+- Wykonywanie reguł automatyzacji równolegle za pomocą wielowątkowości.
+- Przechowywanie reguł automatyzacji i harmonogramów w bazie danych.
+
+**Punkty Końcowe**:
+- `POST /automations`: Tworzenie nowej reguły automatyzacji.
+- `GET /automations/{id}`: Pobierz szczegóły konkretnej reguły automatyzacji.
+- `PUT /automations/{id}`: Aktualizuj regułę automatyzacji.
+- `DELETE /automations/{id}`: Usuń regułę automatyzacji.
+- `GET /automations`: Pobierz wszystkie reguły automatyzacji.
+
+##### 4. Serwis Bezpieczeństwa
+
+**Opis**:
+Serwis Bezpieczeństwa monitoruje urządzenia zabezpieczające, takie jak kamery i czujniki ruchu, oraz rejestruje zdarzenia bezpieczeństwa. Zapewnia punkty końcowe do zgłaszania i pobierania zdarzeń bezpieczeństwa, co umożliwia rejestrowanie i wyzwalanie odpowiednich powiadomień o podejrzanej aktywności. Ten serwis komunikuje się z Serwisem Powiadomień za pomocą Kafka, aby wysyłać użytkownikom powiadomienia w czasie rzeczywistym.
+
+**Kluczowe Funkcje**:
+- Rejestrowanie i pobieranie zdarzeń bezpieczeństwa.
+- Monitorowanie i zarządzanie urządzeniami zabezpieczającymi (np. kamery, czujniki).
+- Wysyłanie powiadomień o zdarzeniach bezpieczeństwa do Serwisu Powiadomień za pomocą Kafka.
+- Obsługa wielu alertów bezpieczeństwa jednocześnie przy użyciu wielowątkowości.
+
+**Punkty Końcowe**:
+- `GET /security/events`: Pobierz zdarzenia bezpieczeństwa.
+- `POST /security/events`: Zgłoś nowe zdarzenie bezpieczeństwa.
+- `GET /security/devices`: Pobierz listę urządzeń zabezpieczających.
+- `POST /security/devices`: Dodaj nowe urządzenie zabezpieczające.
+- `PUT /security/devices/{id}`: Aktualizuj status urządzenia zabezpieczającego.
+- `DELETE /security/devices/{id}`: Usuń urządzenie zabezpieczające.
+
+##### 5. Serwis Powiadomień
+
+**Opis**:
+Serwis Powiadomień odpowiada za wysyłanie alertów i aktualizacji do użytkowników o statusach urządzeń oraz zdarzeniach bezpieczeństwa. Nasłuchuje wiadomości z innych serwisów na tematach Kafka, takich jak Serwis Bezpieczeństwa, i przesyła powiadomienia za pomocą e-maila lub SMS. Dzięki temu użytkownicy są natychmiast informowani o ważnych wydarzeniach i działaniach w ich systemie inteligentnego domu.
+
+**Kluczowe Funkcje**:
+- Nasłuchiwanie wiadomości na tematach Kafka od innych serwisów.
+- Wysyłanie powiadomień e-mail/SMS do użytkowników.
+- Konfiguracja szablonów powiadomień i preferencji użytkowników.
+- Rejestrowanie i śledzenie statusu dostarczania powiadomień.
+
+**Punkty Końcowe**:
+- Brak zewnętrznych punktów końcowych; działa jako serwis działający w tle nasłuchujący na Kafka.
+
+---
+
+### Podział Zadań
+
+#### Inicjalizacja Projektu
+1. **Inicjalizacja Repozytoriów**:
+   - Utwórz repozytoria Git dla każdego mikroserwisu i front-endu React.
+   - Utwórz centralne repozytorium dla dokumentacji i wspólnych konfiguracji.
+
+#### Rozwój Backend
+
+##### Serwis Zarządzania Urządzeniami
+1. **Konfiguracja Projektu**:
+   - Zainicjalizuj projekt Spring Boot.
+   - Dodaj zależności dla Spring Data JPA, Spring Web i Spring Cloud.
+
+2. **Konfiguracja Bazy Danych**:
+   - Skonfiguruj bazę danych H2 dla środowiska deweloperskiego.
+   - Utwórz klasy encji dla urządzeń.
+
+3. **Warstwa Serwisowa**:
+   - Zaimplementuj operacje CRUD dla urządzeń.
+   - Zaimplementuj metody do aktualizacji statusu urządzeń.
+
+4. **Warstwa Kontrolera**:
+   - Utwórz punkty końcowe REST dla operacji CRUD.
+
+5. **Wielowątkowość**:
+   - Wykorzystaj ExecutorService do obsługi równoczesnych interakcji z urządzeniami.
+
+6. **Testowanie**:
+   - Napisz testy jednostkowe dla warstw serwisowej i kontrolera.
+
+7. **Docker**:
+   - Utwórz plik Dockerfile dla Serwisu Zarządzania Urządzeniami.
+
+##### Serwis Zarządzania Użytkownikami
+1. **Konfiguracja Projektu**:
+   - Zainicjalizuj projekt Spring Boot.
+   - Dodaj zależności dla Spring Data JPA, Spring Web, Spring Security i Spring Cloud.
+
+2. **Konfiguracja Bazy Danych**:
+   - Skonfiguruj bazę danych H2 dla środowiska deweloperskiego.
+   - Utwórz klasy encji dla użytkowników.
+
+3. **Warstwa Serwisowa**:
+   - Zaimplementuj rejestrację i uwierzytelnianie użytkowników.
+   - Zarządzaj rolami i uprawnieniami użytkowników.
+
+4. **Warstwa Kontrolera**:
+   - Utwórz punkty końcowe REST dla operacji użytkowników.
+
+5. **Konfiguracja Bezpieczeństwa**:
+   - Zaimplementuj uwierzytelnianie JWT za pomocą Spring Security.
+
+6. **Testowanie**:
+
+
+   - Napisz testy jednostkowe dla warstw serwisowej i kontrolera.
+
+7. **Docker**:
+   - Utwórz plik Dockerfile dla Serwisu Zarządzania Użytkownikami.
+
+##### Serwis Automatyzacji
+1. **Konfiguracja Projektu**:
+   - Zainicjalizuj projekt Spring Boot.
+   - Dodaj zależności dla Spring Data JPA, Spring Web i Spring Cloud.
+
+2. **Konfiguracja Bazy Danych**:
+   - Skonfiguruj bazę danych H2 dla środowiska deweloperskiego.
+   - Utwórz klasy encji dla reguł automatyzacji.
+
+3. **Warstwa Serwisowa**:
+   - Zaimplementuj operacje CRUD dla reguł automatyzacji.
+   - Zaimplementuj logikę wykonywania reguł.
+
+4. **Warstwa Kontrolera**:
+   - Utwórz punkty końcowe REST dla operacji automatyzacji.
+
+5. **Wielowątkowość**:
+   - Wykorzystaj ExecutorService do obsługi równoczesnego wykonywania reguł.
+
+6. **Testowanie**:
+   - Napisz testy jednostkowe dla warstw serwisowej i kontrolera.
+
+7. **Docker**:
+   - Utwórz plik Dockerfile dla Serwisu Automatyzacji.
+
+##### Serwis Bezpieczeństwa
+1. **Konfiguracja Projektu**:
+   - Zainicjalizuj projekt Spring Boot.
+   - Dodaj zależności dla Spring Data JPA, Spring Web, Spring Cloud i Kafka.
+
+2. **Konfiguracja Bazy Danych**:
+   - Skonfiguruj bazę danych H2 dla środowiska deweloperskiego.
+   - Utwórz klasy encji dla zdarzeń i urządzeń bezpieczeństwa.
+
+3. **Warstwa Serwisowa**:
+   - Zaimplementuj operacje CRUD dla urządzeń bezpieczeństwa.
+   - Rejestruj i pobieraj zdarzenia bezpieczeństwa.
+
+4. **Warstwa Kontrolera**:
+   - Utwórz punkty końcowe REST dla operacji bezpieczeństwa.
+
+5. **Konfiguracja Kafka**:
+   - Skonfiguruj producenta Kafka do wysyłania powiadomień o zdarzeniach bezpieczeństwa.
+
+6. **Wielowątkowość**:
+   - Obsługuj wiele alertów bezpieczeństwa jednocześnie.
+
+7. **Testowanie**:
+   - Napisz testy jednostkowe dla warstw serwisowej i kontrolera.
+
+8. **Docker**:
+   - Utwórz plik Dockerfile dla Serwisu Bezpieczeństwa.
+
+##### Serwis Powiadomień
+1. **Konfiguracja Projektu**:
+   - Zainicjalizuj projekt Spring Boot.
+   - Dodaj zależności dla Spring Web, Spring Cloud i Kafka.
+
+2. **Konfiguracja Kafka**:
+   - Skonfiguruj konsumenta Kafka do nasłuchiwania alertów bezpieczeństwa.
+
+3. **Logika Powiadomień**:
+   - Zaimplementuj logikę powiadomień e-mail/SMS.
+   - Skonfiguruj szablony powiadomień i preferencje użytkowników.
+
+4. **Warstwa Serwisowa**:
+   - Zaimplementuj metody obsługujące przychodzące wiadomości Kafka.
+
+5. **Testowanie**:
+   - Napisz testy jednostkowe dla logiki powiadomień.
+
+6. **Docker**:
+   - Utwórz plik Dockerfile dla Serwisu Powiadomień.
+
+#### Rozwój Front-end (React)
+1. **Inicjalizacja Projektu**:
+   - Skonfiguruj nowy projekt React za pomocą Create React App.
+
+2. **Struktura Projektu**:
+   - Zorganizuj strukturę projektu na komponenty, usługi i narzędzia.
+
+3. **Uwierzytelnianie Użytkowników**:
+   - Utwórz komponenty do rejestracji i logowania.
+   - Zaimplementuj logikę uwierzytelniania za pomocą JWT.
+
+4. **Zarządzanie Urządzeniami**:
+   - Utwórz komponenty do wyświetlania i zarządzania urządzeniami.
+   - Zaimplementuj wywołania API do Serwisu Zarządzania Urządzeniami.
+
+5. **Reguły Automatyzacji**:
+   - Utwórz komponenty do tworzenia, aktualizacji i usuwania reguł automatyzacji.
+   - Zaimplementuj wywołania API do Serwisu Automatyzacji.
+
+6. **Monitorowanie Bezpieczeństwa**:
+   - Utwórz komponenty do wyświetlania zdarzeń bezpieczeństwa i zarządzania urządzeniami zabezpieczającymi.
+   - Zaimplementuj wywołania API do Serwisu Bezpieczeństwa.
+
+7. **Wyświetlanie Powiadomień**:
+   - Zaimplementuj system powiadomień do wyświetlania alertów w czasie rzeczywistym.
+
+8. **Zarządzanie Stanem**:
+   - Wykorzystaj Context API lub Redux do zarządzania stanem.
+
+9. **Testowanie**:
+   - Napisz testy jednostkowe dla komponentów React za pomocą Jest i React Testing Library.
+
+10. **Docker**:
+    - Utwórz plik Dockerfile dla aplikacji React.
+
+#### Integracja i Wdrożenie
+1. **Odkrywanie Usług**:
+   - Skonfiguruj Spring Cloud Netflix Eureka do odkrywania usług.
+
+2. **Bramka API**:
+   - Zaimplementuj Spring Cloud Gateway do kierowania żądań do odpowiednich mikroserwisów.
+
+3. **Zarządzanie Konfiguracją**:
+   - Wykorzystaj Spring Cloud Config do centralnego zarządzania konfiguracją.
+
+4. **Pipeline CI/CD**:
+   - Skonfiguruj pipeline CI/CD za pomocą GitHub Actions.
+   - Zautomatyzuj procesy testowania, budowania i wdrażania.
+
+5. **Docker Compose**:
+   - Utwórz plik Docker Compose do uruchomienia wszystkich serwisów razem dla lokalnego rozwoju.
+
+6. **Wdrożenie Kubernetes**:
+   - Utwórz manifesty Kubernetes do wdrażania serwisów.
+   - Skonfiguruj klaster Kubernetes do orkiestracji i skalowania.
+
+7. **Monitorowanie i Logowanie**:
+   - Zaimplementuj monitorowanie za pomocą Prometheus i Grafana.
+   - Skonfiguruj centralne logowanie za pomocą stosu ELK (Elasticsearch, Logstash, Kibana).
+
+#### Dokumentacja i Końcowy Przegląd
+1. **Dokumentacja API**:
+   - Utwórz dokumentację API za pomocą Swagger/OpenAPI.
+
+2. **Końcowe Testowanie**:
+   - Przeprowadź testy end-to-end, aby upewnić się, że wszystkie komponenty działają razem bezproblemowo.
+
+---
+
+### Pola w POJO dla Urządzenia
+
+```java
+public class Device {
+    private Long id;
+    private String name;
+    private Type type;
+    private String status;
+    private String location;
+    private String manufacturer;
+    private LocalDateTime installationDate;
+}
+```
+
+**Opis Pól**:
+- **id**: Unikalny identyfikator urządzenia.
+- **name**: Nazwa urządzenia.
+- **type**: Typ urządzenia (np. światło, termostat, kamera).
+- **status**: Aktualny status urządzenia (np. włączone, wyłączone).
+- **location**: Lokalizacja urządzenia w domu.
+- **manufacturer**: Producent urządzenia.
+- **installationDate**: Data instalacji urządzenia.
