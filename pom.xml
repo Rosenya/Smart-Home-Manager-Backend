@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ArkadiaPlocienniczak</groupId>
-	<artifactId>SmartHomeService</artifactId>
+	<artifactId>SmartHomeManagerService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Smart Home Service App</name>
+	<name>Smart Home Managernpm install axios Service App</name>
 	<description>Smart Home Devices Manager</description>
 	<properties>
 		<java.version>17</java.version>
